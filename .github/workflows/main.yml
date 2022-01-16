@@ -43,6 +43,13 @@ jobs:
             fi
           done
           git commit -am "formatting filenames ${GITHUB_SHA::8}" ||  true
+      - name: take changed file
+        run: |
+          git remote -v
+          git branch
+          git remote set-url origin https://x-acces-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
+          git diff --diff-filter=dr --name-only origin/master > git_diff.txt
+          echo "changed file-- `cat git_diff.txt`"
       - name: static lint config
         run: cmake -B build -S . -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
         
